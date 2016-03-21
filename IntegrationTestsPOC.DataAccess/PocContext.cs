@@ -1,12 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Common;
 using System.Data.Entity;
 
 namespace IntegrationTestsPOC.DataAccess
 {
     public class PocContext : DbContext
     {
+        public PocContext(DbConnection dbConnection) : base(dbConnection, true)
+        {
+        }
+
         public DbSet<Department> Departments { get; set; }
         public DbSet<Person> People { get; set; }
     }

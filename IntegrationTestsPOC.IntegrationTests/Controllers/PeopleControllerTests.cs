@@ -10,7 +10,7 @@ namespace IntegrationTestsPOC.IntegrationTests.Controllers
     public class PeopleControllerTests : BaseServerTests
     {
         [Test]
-        public void GetAll()
+        public void ShouldGetAll()
         {
             // arrange
             var expectedJson = JsonConvert.SerializeObject(new List<dynamic>
@@ -28,7 +28,28 @@ namespace IntegrationTestsPOC.IntegrationTests.Controllers
                 response.ShouldContainContent(mimeType, expectedJson);
             };
 
-            RequestFor("api/people", mimeType, HttpMethod.Get, assert);
+            RequestGetFor("api/people", mimeType, assert);
+        }
+
+        [Test]
+        public void ShouldAddNewPersonOnPost()
+        {
+            // arrange
+            var mimeType = "application/json";
+            var postBody = new { firstName = "Mike", lastName = "Morelez" };
+
+            var expectedJson = JsonConvert.SerializeObject
+            (
+                new { id = 4, firstName = "Mike", lastName = "Morelez" }
+            );
+
+            // act & assert
+            Action<HttpResponseMessage> assert = response =>
+            {
+                response.ShouldContainContent(mimeType, expectedJson);
+            };
+
+            RequestPostFor("api/people", mimeType, postBody, assert);
         }
     }
 }

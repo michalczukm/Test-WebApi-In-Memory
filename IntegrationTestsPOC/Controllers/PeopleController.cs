@@ -40,10 +40,12 @@ namespace IntegrationTestsPOC.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody]Person person)
+        public Person Post([FromBody]Person person)
         {
-            _context.People.Add(person);
+            var addedPerson = _context.People.Add(person);
             _context.SaveChanges();
+
+            return addedPerson;
         }
 
         [HttpPut]

@@ -16,7 +16,7 @@ namespace IntegrationTestsPOC.DataAccess.Migrations
                 new Person {FirstName = "Andrew", LastName = "Peters"},
                 new Person {FirstName = "Brice", LastName = "Lambson"},
                 new Person {FirstName = "Rowan", LastName = "Miller"}
-                );
+            );
         }
     }
 }

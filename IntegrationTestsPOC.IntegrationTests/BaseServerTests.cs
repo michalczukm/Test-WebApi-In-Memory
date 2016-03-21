@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using System.Transactions;
+using System.Web.Http;
+using Autofac;
 using Microsoft.Owin.Testing;
 using NUnit.Framework;
+using Owin;
 
 namespace IntegrationTestsPOC.IntegrationTests
 {
@@ -11,15 +15,23 @@ namespace IntegrationTestsPOC.IntegrationTests
     {
         private TestServer _server;
         private HttpClient _client;
-//        private TransactionScope _transactionScope;
 
         protected HttpClient Client => _client;
 
         [SetUp]
         public void Setup()
         {
-//            _transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
-            _server = TestServer.Create<Startup>();
+            _server = TestServer.Create(app =>
+            {
+                var configuration = new HttpConfiguration();
+                WebApiConfig.Register(configuration);
+                ContainerConfig.ConfigureDependencyResolver(configuration, new List<Module>
+                {
+                    new IntegrationTestsModule()
+                });
+
+                app.UseWebApi(configuration);
+            });
 
             _client = _server.HttpClient;
         }
@@ -29,20 +41,29 @@ namespace IntegrationTestsPOC.IntegrationTests
         {
             _client.Dispose();
             _server.Dispose();
-//            _transactionScope.Dispose();
         }
 
-        protected HttpRequestMessage CreateRequest(string url, string mimeType, HttpMethod method)
+        protected HttpRequestMessage CreateRequest(string url, string mimeType, HttpMethod method, HttpContent content)
         {
             var request = new HttpRequestMessage(method, url);
+            request.Content = content;
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mimeType));
 
             return request;
         }
 
-        protected void RequestFor(string uri, string mimeType, HttpMethod httpMethod, Action<HttpResponseMessage> assert)
+        protected void RequestGetFor(string uri, string mimeType, Action<HttpResponseMessage> assert)
         {
-            using (var request = CreateRequest(uri, mimeType, httpMethod))
+            using (HttpRequestMessage request = CreateRequest(uri, mimeType, HttpMethod.Get, null))
+            using (HttpResponseMessage response = Client.SendAsync(request).Result)
+            {
+                assert(response);
+            }
+        }
+
+        protected void RequestPostFor(string uri, string mimeType, object content, Action<HttpResponseMessage> assert)
+        {
+            using (HttpRequestMessage request = CreateRequest(uri, mimeType, HttpMethod.Post, new ObjectContent(typeof(object), content, new JsonMediaTypeFormatter())))
             using (HttpResponseMessage response = Client.SendAsync(request).Result)
             {
                 assert(response);
