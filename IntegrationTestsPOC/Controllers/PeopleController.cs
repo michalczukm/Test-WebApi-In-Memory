@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Migrations;
+using System.Linq;
 using System.Web.Http;
 using IntegrationTestsPOC.DataAccess;
 
@@ -17,7 +19,18 @@ namespace IntegrationTestsPOC.Controllers
         [HttpGet]
         public IEnumerable<Person> Get()
         {
-            return _context.People;
+            try
+            {
+                var dbSet = _context.People.ToList();
+                return dbSet;
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
+
+            return null;
         }
 
         [HttpGet]

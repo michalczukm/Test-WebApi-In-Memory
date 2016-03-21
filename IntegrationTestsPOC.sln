@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTestsPOC", "Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTestsPOC.DataAccess", "IntegrationTestsPOC.DataAccess\IntegrationTestsPOC.DataAccess.csproj", "{0A507D1C-18C4-4308-B459-D9E787AA6E9B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7C07AA11-6DD0-4DA7-B3F3-A4DCD48EE8B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTestsPOC.IntegrationTests", "IntegrationTestsPOC.IntegrationTests\IntegrationTestsPOC.IntegrationTests.csproj", "{8E8A51AD-CBCB-45A5-8FE6-49E74B4D5851}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +25,15 @@ Global
 		{0A507D1C-18C4-4308-B459-D9E787AA6E9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A507D1C-18C4-4308-B459-D9E787AA6E9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A507D1C-18C4-4308-B459-D9E787AA6E9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E8A51AD-CBCB-45A5-8FE6-49E74B4D5851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E8A51AD-CBCB-45A5-8FE6-49E74B4D5851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E8A51AD-CBCB-45A5-8FE6-49E74B4D5851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E8A51AD-CBCB-45A5-8FE6-49E74B4D5851}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8E8A51AD-CBCB-45A5-8FE6-49E74B4D5851} = {7C07AA11-6DD0-4DA7-B3F3-A4DCD48EE8B9}
 	EndGlobalSection
 EndGlobal
