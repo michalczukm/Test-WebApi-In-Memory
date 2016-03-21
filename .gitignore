@@ -8,7 +8,6 @@
 /**/coverage/
 /**/typings
 /**/_references.js
-/**/IntegrationTestsPOC.DataAccess/**/*.mdf
 /**/IntegrationTestsPOC.DataAccess/**/*.ldf
 
 git #Git junk
