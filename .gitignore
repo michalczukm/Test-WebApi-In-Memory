@@ -1,0 +1,83 @@
+# Project specific files
+/**/node_modules/
+/**/bower_components/
+/**/dist/
+/**/.tmp/
+/**/.sass-cache/
+/**/.tsbuild/
+/**/coverage/
+/**/typings
+/**/_references.js
+/**/IntegrationTestsPOC.DataAccess/**/*.mdf
+/**/IntegrationTestsPOC.DataAccess/**/*.ldf
+
+git #Git junk
+*.orig
+
+#OS junk files
+[Tt]humbs.db
+*.DS_Store
+
+#Visual Studio files
+/**/project.lock.json
+.vs
+*.[Oo]bj
+*.user
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.[Cc]ache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.sdf
+*.opensdf
+*.unsuccessfulbuild
+ipch/
+obj/
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+artifacts/*
+Ankh.NoLoad
+
+#MonoDevelop
+*.pidb
+*.userprefs
+
+#Tooling
+_ReSharper*/
+*.resharper
+[Tt]est[Rr]esult*
+
+#Project files
+[Bb]uild/
+
+#Subversion files
+.svn
+
+# Office Temp Files
+~$*
+
+#NuGet
+packages/
+
+#ncrunch
+*ncrunch*
+*crunch*.local.xml
+
+# visual studio database projects
+*.dbmdl
+
+#Test files
+*.testsettings
+
