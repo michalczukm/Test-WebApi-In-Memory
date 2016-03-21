@@ -11,14 +11,14 @@ namespace IntegrationTestsPOC.IntegrationTests
     {
         private TestServer _server;
         private HttpClient _client;
-        private TransactionScope _transactionScope;
+//        private TransactionScope _transactionScope;
 
         protected HttpClient Client => _client;
 
         [SetUp]
         public void Setup()
         {
-            _transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
+//            _transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
             _server = TestServer.Create<Startup>();
 
             _client = _server.HttpClient;
@@ -29,7 +29,7 @@ namespace IntegrationTestsPOC.IntegrationTests
         {
             _client.Dispose();
             _server.Dispose();
-            _transactionScope.Dispose();
+//            _transactionScope.Dispose();
         }
 
         protected HttpRequestMessage CreateRequest(string url, string mimeType, HttpMethod method)
