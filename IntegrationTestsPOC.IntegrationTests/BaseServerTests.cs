@@ -7,20 +7,18 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
 using Microsoft.Owin.Testing;
-using NUnit.Framework;
 using Owin;
 
 namespace IntegrationTestsPOC.IntegrationTests
 {
-    public class BaseServerTests
+    public class BaseServerTests : IDisposable
     {
         private TestServer _server;
         private HttpClient _client;
 
         protected HttpClient Client => _client;
 
-        [SetUp]
-        public void Setup()
+        public BaseServerTests()
         {
             _server = TestServer.Create(app =>
             {
@@ -37,8 +35,7 @@ namespace IntegrationTestsPOC.IntegrationTests
             _client = _server.HttpClient;
         }
 
-        [TearDown]
-        public void TearDown()
+        public void Dispose()
         {
             _client.Dispose();
             _server.Dispose();

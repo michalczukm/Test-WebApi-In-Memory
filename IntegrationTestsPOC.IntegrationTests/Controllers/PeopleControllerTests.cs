@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using NUnit.Framework;
+using Xunit;
 
 namespace IntegrationTestsPOC.IntegrationTests.Controllers
 {
-    [TestFixture]
     public class PeopleControllerTests : BaseServerTests
     {
-        [Test]
+        [Fact]
         public async Task ShouldGetAll()
         {
             // arrange
@@ -32,7 +31,7 @@ namespace IntegrationTestsPOC.IntegrationTests.Controllers
             await RequestGetForAsync("api/people", mimeType, assert);
         }
 
-        [Test]
+        [Fact]
         public async Task ShouldAddNewPersonOnPost()
         {
             // arrange
