@@ -13,8 +13,8 @@ namespace IntegrationTestsPOC.IntegrationTests
 {
     public class BaseServerTests : IDisposable
     {
-        private TestServer _server;
-        private HttpClient _client;
+        private readonly TestServer _server;
+        private readonly HttpClient _client;
 
         protected HttpClient Client => _client;
 
@@ -43,28 +43,25 @@ namespace IntegrationTestsPOC.IntegrationTests
 
         protected HttpRequestMessage CreateRequest(string url, string mimeType, HttpMethod method, HttpContent content)
         {
-            var request = new HttpRequestMessage(method, url);
-            request.Content = content;
+            var request = new HttpRequestMessage(method, url) {Content = content};
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mimeType));
-
             return request;
         }
 
-        protected async Task RequestGetForAsync(string uri, string mimeType, Action<HttpResponseMessage> assert)
+        protected async Task<HttpResponseMessage> GetAsync(string uri, string mimeType)
         {
             using (HttpRequestMessage request = CreateRequest(uri, mimeType, HttpMethod.Get, null))
-            using (HttpResponseMessage response = await Client.SendAsync(request))
             {
-                assert(response);
+                return await Client.SendAsync(request);
             }
         }
 
-        protected async Task RequestPostForAsync(string uri, string mimeType, object content, Action<HttpResponseMessage> assert)
+        protected async Task<HttpResponseMessage> PostAsync(string uri, string mimeType, object content)
         {
-            using (HttpRequestMessage request = CreateRequest(uri, mimeType, HttpMethod.Post, new ObjectContent(typeof(object), content, new JsonMediaTypeFormatter())))
-            using (HttpResponseMessage response = await Client.SendAsync(request))
+            using (HttpRequestMessage request = CreateRequest(uri, mimeType, HttpMethod.Post,
+                new ObjectContent(typeof(object), content, new JsonMediaTypeFormatter())))
             {
-                assert(response);
+                return await Client.SendAsync(request);
             }
         }
     }

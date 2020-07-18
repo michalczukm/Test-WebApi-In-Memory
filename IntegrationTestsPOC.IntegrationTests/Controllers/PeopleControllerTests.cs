@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
+using FluentAssertions.Json;
+using Newtonsoft.Json.Linq;
 
 namespace IntegrationTestsPOC.IntegrationTests.Controllers
 {
@@ -22,13 +24,16 @@ namespace IntegrationTestsPOC.IntegrationTests.Controllers
 
             var mimeType = "application/json";
 
-            // act & assert
-            Action<HttpResponseMessage> assert = response =>
+            // act
+            using (var actualResponse = await GetAsync("api/people", mimeType))
             {
-                response.ShouldContainContent(mimeType, expectedJson);
-            };
-
-            await RequestGetForAsync("api/people", mimeType, assert);
+                // assert
+                actualResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+                var actualResponseContent = await actualResponse.Content.ReadAsStringAsync();
+                var actual = JToken.Parse(actualResponseContent);
+                var expected = JToken.Parse(expectedJson);
+                actual.Should().BeEquivalentTo(expected);
+            }
         }
 
         [Fact]
@@ -43,13 +48,16 @@ namespace IntegrationTestsPOC.IntegrationTests.Controllers
                 new { id = 4, firstName = "Mike", lastName = "Morelez" }
             );
 
-            // act & assert
-            Action<HttpResponseMessage> assert = response =>
+            // act
+            using (var actualResponse = await PostAsync("api/people", mimeType, postBody))
             {
-                response.ShouldContainContent(mimeType, expectedJson);
-            };
-
-            await RequestPostForAsync("api/people", mimeType, postBody, assert);
+                // assert
+                actualResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+                var actualResponseContent = await actualResponse.Content.ReadAsStringAsync();
+                var actual = JToken.Parse(actualResponseContent);
+                var expected = JToken.Parse(expectedJson);
+                actual.Should().BeEquivalentTo(expected);
+            }
         }
     }
 }
