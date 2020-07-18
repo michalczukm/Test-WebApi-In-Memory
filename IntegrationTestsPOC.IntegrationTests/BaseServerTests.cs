@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
 using Microsoft.Owin.Testing;
@@ -52,19 +53,19 @@ namespace IntegrationTestsPOC.IntegrationTests
             return request;
         }
 
-        protected void RequestGetFor(string uri, string mimeType, Action<HttpResponseMessage> assert)
+        protected async Task RequestGetForAsync(string uri, string mimeType, Action<HttpResponseMessage> assert)
         {
             using (HttpRequestMessage request = CreateRequest(uri, mimeType, HttpMethod.Get, null))
-            using (HttpResponseMessage response = Client.SendAsync(request).Result)
+            using (HttpResponseMessage response = await Client.SendAsync(request))
             {
                 assert(response);
             }
         }
 
-        protected void RequestPostFor(string uri, string mimeType, object content, Action<HttpResponseMessage> assert)
+        protected async Task RequestPostForAsync(string uri, string mimeType, object content, Action<HttpResponseMessage> assert)
         {
             using (HttpRequestMessage request = CreateRequest(uri, mimeType, HttpMethod.Post, new ObjectContent(typeof(object), content, new JsonMediaTypeFormatter())))
-            using (HttpResponseMessage response = Client.SendAsync(request).Result)
+            using (HttpResponseMessage response = await Client.SendAsync(request))
             {
                 assert(response);
             }

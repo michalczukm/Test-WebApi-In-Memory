@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -10,7 +11,7 @@ namespace IntegrationTestsPOC.IntegrationTests.Controllers
     public class PeopleControllerTests : BaseServerTests
     {
         [Test]
-        public void ShouldGetAll()
+        public async Task ShouldGetAll()
         {
             // arrange
             var expectedJson = JsonConvert.SerializeObject(new List<dynamic>
@@ -28,11 +29,11 @@ namespace IntegrationTestsPOC.IntegrationTests.Controllers
                 response.ShouldContainContent(mimeType, expectedJson);
             };
 
-            RequestGetFor("api/people", mimeType, assert);
+            await RequestGetForAsync("api/people", mimeType, assert);
         }
 
         [Test]
-        public void ShouldAddNewPersonOnPost()
+        public async Task ShouldAddNewPersonOnPost()
         {
             // arrange
             var mimeType = "application/json";
@@ -49,7 +50,7 @@ namespace IntegrationTestsPOC.IntegrationTests.Controllers
                 response.ShouldContainContent(mimeType, expectedJson);
             };
 
-            RequestPostFor("api/people", mimeType, postBody, assert);
+            await RequestPostForAsync("api/people", mimeType, postBody, assert);
         }
     }
 }
