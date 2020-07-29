@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
 using Microsoft.Owin.Testing;
-using NUnit.Framework;
 using Owin;
 
 namespace IntegrationTestsPOC.IntegrationTests
 {
-    public class BaseServerTests
+    public class BaseServerTests : IDisposable
     {
-        private TestServer _server;
-        private HttpClient _client;
+        private readonly TestServer _server;
+        private readonly HttpClient _client;
 
         protected HttpClient Client => _client;
 
-        [SetUp]
-        public void Setup()
+        public BaseServerTests()
         {
             _server = TestServer.Create(app =>
             {
@@ -36,8 +35,7 @@ namespace IntegrationTestsPOC.IntegrationTests
             _client = _server.HttpClient;
         }
 
-        [TearDown]
-        public void TearDown()
+        public void Dispose()
         {
             _client.Dispose();
             _server.Dispose();
@@ -45,28 +43,25 @@ namespace IntegrationTestsPOC.IntegrationTests
 
         protected HttpRequestMessage CreateRequest(string url, string mimeType, HttpMethod method, HttpContent content)
         {
-            var request = new HttpRequestMessage(method, url);
-            request.Content = content;
+            var request = new HttpRequestMessage(method, url) {Content = content};
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mimeType));
-
             return request;
         }
 
-        protected void RequestGetFor(string uri, string mimeType, Action<HttpResponseMessage> assert)
+        protected async Task<HttpResponseMessage> GetAsync(string uri, string mimeType)
         {
             using (HttpRequestMessage request = CreateRequest(uri, mimeType, HttpMethod.Get, null))
-            using (HttpResponseMessage response = Client.SendAsync(request).Result)
             {
-                assert(response);
+                return await Client.SendAsync(request);
             }
         }
 
-        protected void RequestPostFor(string uri, string mimeType, object content, Action<HttpResponseMessage> assert)
+        protected async Task<HttpResponseMessage> PostAsync(string uri, string mimeType, object content)
         {
-            using (HttpRequestMessage request = CreateRequest(uri, mimeType, HttpMethod.Post, new ObjectContent(typeof(object), content, new JsonMediaTypeFormatter())))
-            using (HttpResponseMessage response = Client.SendAsync(request).Result)
+            using (HttpRequestMessage request = CreateRequest(uri, mimeType, HttpMethod.Post,
+                new ObjectContent(typeof(object), content, new JsonMediaTypeFormatter())))
             {
-                assert(response);
+                return await Client.SendAsync(request);
             }
         }
     }

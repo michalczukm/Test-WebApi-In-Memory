@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTestsPOC", "IntegrationTestsPOC\IntegrationTestsPOC.csproj", "{B4A6D0D3-EE8A-461F-9F67-8378030627A8}"
 EndProject
@@ -35,5 +35,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8E8A51AD-CBCB-45A5-8FE6-49E74B4D5851} = {7C07AA11-6DD0-4DA7-B3F3-A4DCD48EE8B9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {41BC65C2-668C-4057-AC7A-E6E1FED4754D}
 	EndGlobalSection
 EndGlobal

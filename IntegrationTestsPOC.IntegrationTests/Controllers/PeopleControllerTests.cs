@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Newtonsoft.Json;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions.Json;
+using Newtonsoft.Json.Linq;
 
 namespace IntegrationTestsPOC.IntegrationTests.Controllers
 {
-    [TestFixture]
     public class PeopleControllerTests : BaseServerTests
     {
-        [Test]
-        public void ShouldGetAll()
+        [Fact]
+        public async Task ShouldGetAll()
         {
             // arrange
             var expectedJson = JsonConvert.SerializeObject(new List<dynamic>
@@ -22,17 +24,20 @@ namespace IntegrationTestsPOC.IntegrationTests.Controllers
 
             var mimeType = "application/json";
 
-            // act & assert
-            Action<HttpResponseMessage> assert = response =>
+            // act
+            using (var actualResponse = await GetAsync("api/people", mimeType))
             {
-                response.ShouldContainContent(mimeType, expectedJson);
-            };
-
-            RequestGetFor("api/people", mimeType, assert);
+                // assert
+                actualResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+                var actualResponseContent = await actualResponse.Content.ReadAsStringAsync();
+                var actual = JToken.Parse(actualResponseContent);
+                var expected = JToken.Parse(expectedJson);
+                actual.Should().BeEquivalentTo(expected);
+            }
         }
 
-        [Test]
-        public void ShouldAddNewPersonOnPost()
+        [Fact]
+        public async Task ShouldAddNewPersonOnPost()
         {
             // arrange
             var mimeType = "application/json";
@@ -43,13 +48,16 @@ namespace IntegrationTestsPOC.IntegrationTests.Controllers
                 new { id = 4, firstName = "Mike", lastName = "Morelez" }
             );
 
-            // act & assert
-            Action<HttpResponseMessage> assert = response =>
+            // act
+            using (var actualResponse = await PostAsync("api/people", mimeType, postBody))
             {
-                response.ShouldContainContent(mimeType, expectedJson);
-            };
-
-            RequestPostFor("api/people", mimeType, postBody, assert);
+                // assert
+                actualResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+                var actualResponseContent = await actualResponse.Content.ReadAsStringAsync();
+                var actual = JToken.Parse(actualResponseContent);
+                var expected = JToken.Parse(expectedJson);
+                actual.Should().BeEquivalentTo(expected);
+            }
         }
     }
 }
